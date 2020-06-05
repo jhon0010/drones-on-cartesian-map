@@ -10,7 +10,7 @@ applying some strategical and tactical techniques.
 
 Furthermore, for the tactical approach I use Hexagonal Architecture.     
 
-![alt text](https://github.com/jhon0010/drones-on-cartesian-map/docs/images/HexagonalArchitecture.png)
+![alt text](https://github.com/jhon0010/drones-on-cartesian-map/blob/master/docs/images/HexagonalArchitecture.png)
 
 
 ## Used Design Patterns
