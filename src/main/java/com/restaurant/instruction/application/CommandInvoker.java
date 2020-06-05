@@ -26,7 +26,7 @@ public class CommandInvoker {
         executeDroneInstructions(instructionsToExecute);
     }
 
-    private static Map<Drone, List<Instruction>> loadInstructionsForFile() throws InputInstructionFileNotFoundException {
+    public static Map<Drone, List<Instruction>> loadInstructionsForFile() throws InputInstructionFileNotFoundException {
 
         Map<Drone, List<Instruction>> instructionsToExecute = new HashMap<>();
         Map<String, List<String>> filesAndLines = FileInputReader.readInputInstructionFiles();
@@ -50,7 +50,7 @@ public class CommandInvoker {
         return instructionsToExecute;
     }
 
-    private static void executeDroneInstructions(Map<Drone, List<Instruction>> instructionsToExecute) {
+    public static void executeDroneInstructions(Map<Drone, List<Instruction>> instructionsToExecute) {
 
         Map<String, List<String>> droneLocations = new HashMap<>();
 
