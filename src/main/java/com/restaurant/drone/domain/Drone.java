@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.slf4j.Logger;
 
+import java.util.StringJoiner;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Data
@@ -28,6 +30,11 @@ public class Drone {
         this.name = name;
         this.location = DroneLocation.getDefault();
         this.id = new DroneId();
+    }
+
+    public String getOutPutFormat(){
+        return "(" + this.location.getX() + "," + this.location.getY() + ")" +
+                " dirección " + this.location.getOrientation().name;
     }
 
     public void moveForward() {
