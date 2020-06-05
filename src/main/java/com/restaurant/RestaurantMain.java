@@ -13,7 +13,7 @@ public class RestaurantMain {
     public static void main(String[] args) {
         LOGGER.info("Starting drone's restaurants delivery ..");
         try {
-            CommandInvoker.start();
+            new CommandInvoker().start();
         } catch (InputInstructionFileNotFoundException e) {
             LOGGER.error(e.getMessage());
         }

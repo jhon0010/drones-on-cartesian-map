@@ -10,6 +10,7 @@ import com.restaurant.shared.infraestructure.exceptions.InputInstructionFileNotF
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,23 +20,22 @@ public class CommandInvoker {
 
     private static final Logger LOGGER = getLogger(CommandInvoker.class);
 
-    public static void start() throws InputInstructionFileNotFoundException {
-        final List<Instruction> instructions = loadInstructionsForFile();
-
-        for (Instruction instruction : instructions) {
-            LOGGER.info("Instruction = " + instruction);
-        }
+    public void start() throws InputInstructionFileNotFoundException {
+        final Map<Drone, List<Instruction>> instructionsToExecute = loadInstructionsForFile();
+        executeDroneInstructions(instructionsToExecute);
     }
 
-    private static List<Instruction> loadInstructionsForFile() throws InputInstructionFileNotFoundException {
+    private static Map<Drone, List<Instruction>> loadInstructionsForFile() throws InputInstructionFileNotFoundException {
 
         List<Instruction> instructions = new ArrayList<>();
-        final Map<String, List<String>> filesAndLines = FileReader.readInputInstructionFiles();
+        Map<Drone, List<Instruction>> instructionsToExecute = new HashMap<>();
+        Map<String, List<String>> filesAndLines = FileReader.readInputInstructionFiles();
+        Drone drone;
 
         for (Map.Entry<String, List<String>> entry : filesAndLines.entrySet()) {
 
             List<Command> commands = new ArrayList<>();
-            final Drone drone = new Drone(DroneName.builder().value(entry.getKey()).build());
+            drone = new Drone(DroneName.builder().value(entry.getKey()).build());
 
             for (String lineInFile : entry.getValue()) {
                 final char[] commandChars = lineInFile.toCharArray();
@@ -44,16 +44,20 @@ public class CommandInvoker {
                 }
             }
             instructions.add(Instruction.builder().commands(commands).build());
+            instructionsToExecute.putIfAbsent(drone,instructions);
         }
-        return instructions;
+        return instructionsToExecute;
     }
 
-    private void executeDroneInstructions(List<Instruction> instructions) {
+    private static void executeDroneInstructions(Map<Drone, List<Instruction>> instructionsToExecute) {
 
-        instructions.forEach(
-                instruction -> instruction.getCommands()
-                        .forEach(Command::execute)
-        );
+        for (Map.Entry<Drone, List<Instruction>> entry : instructionsToExecute.entrySet()) {
+
+            entry.getValue().forEach(
+                    instruction -> instruction.getCommands()
+                            .forEach(Command::execute));
+            LOGGER.info("The final position for the drone is " + entry.getKey());
+        }
     }
 
 }
