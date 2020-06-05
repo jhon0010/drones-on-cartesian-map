@@ -1,13 +1,15 @@
 package com.restaurant.drone.domain.location;
 
 import com.restaurant.shared.domain.Orientation;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-@Builder
+@ToString
+@AllArgsConstructor
 public class DroneLocation {
 
     private int x;

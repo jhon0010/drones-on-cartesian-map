@@ -2,11 +2,15 @@ package com.restaurant.drone.domain;
 
 
 import com.restaurant.drone.domain.location.DroneLocation;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
-@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Drone {
 
     public static final int MAX_NUM_LUNCH = 3;
@@ -15,15 +19,21 @@ public class Drone {
     private DroneName name;
     private DroneLocation location;
 
-    public void moveForward(){
+    public Drone(DroneName name) {
+        this.name = name;
+        this.location = new DroneLocation();
+        this.id = new DroneId();
+    }
+
+    public void moveForward() {
 
     }
 
-    public void turnLeft(){
+    public void turnLeft() {
 
     }
 
-    public void turnRight(){
+    public void turnRight() {
 
     }
 

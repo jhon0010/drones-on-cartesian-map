@@ -1,11 +1,10 @@
 package com.restaurant.drone.domain;
 
-import com.restaurant.shared.domain.Identifier;
-import com.restaurant.shared.domain.StringValueObject;
+import lombok.Builder;
+import lombok.Data;
 
-public class DroneName extends StringValueObject {
-
-    public DroneName(String value) {
-        super(value);
-    }
+@Data
+@Builder
+public class DroneName {
+    private final String value;
 }

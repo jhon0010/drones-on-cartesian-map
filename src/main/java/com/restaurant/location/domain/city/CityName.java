@@ -1,11 +1,10 @@
 package com.restaurant.location.domain.city;
 
-import com.restaurant.shared.domain.StringValueObject;
+import lombok.Builder;
+import lombok.Data;
 
-public class CityName extends StringValueObject {
-
-    public CityName(String value) {
-        super(value);
-    }
-
+@Builder
+@Data
+public class CityName {
+    private String value;
 }
