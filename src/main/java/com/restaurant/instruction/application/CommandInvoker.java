@@ -5,8 +5,9 @@ import com.restaurant.drone.domain.DroneName;
 import com.restaurant.instruction.domain.Instruction;
 import com.restaurant.instruction.domain.command.Command;
 import com.restaurant.instruction.domain.command.CommandFactory;
-import com.restaurant.shared.infraestructure.FileReader;
+import com.restaurant.shared.infraestructure.file.FileInputReader;
 import com.restaurant.shared.infraestructure.exceptions.InputInstructionFileNotFoundException;
+import com.restaurant.shared.infraestructure.file.FileOutputWriter;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -27,23 +28,23 @@ public class CommandInvoker {
 
     private static Map<Drone, List<Instruction>> loadInstructionsForFile() throws InputInstructionFileNotFoundException {
 
-        List<Instruction> instructions = new ArrayList<>();
         Map<Drone, List<Instruction>> instructionsToExecute = new HashMap<>();
-        Map<String, List<String>> filesAndLines = FileReader.readInputInstructionFiles();
+        Map<String, List<String>> filesAndLines = FileInputReader.readInputInstructionFiles();
         Drone drone;
 
         for (Map.Entry<String, List<String>> entry : filesAndLines.entrySet()) {
-
-            List<Command> commands = new ArrayList<>();
-            drone = new Drone(DroneName.builder().value(entry.getKey()).build());
+            List<Instruction> instructions = new ArrayList<>();
+            drone = new Drone(DroneName.builder().value(entry.getKey()
+                    .substring(2,entry.getKey().indexOf('.'))).build());
 
             for (String lineInFile : entry.getValue()) {
+                List<Command> commands = new ArrayList<>();
                 final char[] commandChars = lineInFile.toCharArray();
                 for (char command : commandChars) {
                     commands.add(CommandFactory.getCommandInstance(command, drone));
                 }
+                instructions.add(Instruction.builder().commands(commands).build());
             }
-            instructions.add(Instruction.builder().commands(commands).build());
             instructionsToExecute.putIfAbsent(drone,instructions);
         }
         return instructionsToExecute;
@@ -51,12 +52,28 @@ public class CommandInvoker {
 
     private static void executeDroneInstructions(Map<Drone, List<Instruction>> instructionsToExecute) {
 
+        Map<String, List<String>> droneLocations = new HashMap<>();
+
         for (Map.Entry<Drone, List<Instruction>> entry : instructionsToExecute.entrySet()) {
 
-            entry.getValue().forEach(
-                    instruction -> instruction.getCommands()
-                            .forEach(Command::execute));
-            LOGGER.info("The final position for the drone is " + entry.getKey());
+            var finalLocations = new ArrayList<String>();
+
+            entry.getValue().forEach(instruction -> {
+                instruction.getCommands().forEach(Command::execute);
+                finalLocations.add(entry.getKey().getOutPutFormat().concat("\n"));
+            });
+
+            droneLocations.put(entry.getKey().getName().getValue(), finalLocations);
+            LOGGER.info("*** The final position for the drone " + entry.getKey().getName().getValue() +
+                    " is " + entry.getKey().getOutPutFormat());
+        }
+        writeInOutPutFile(droneLocations);
+    }
+
+    private static void writeInOutPutFile(Map<String, List<String>> droneLocations){
+
+        for(Map.Entry<String, List<String>> entry : droneLocations.entrySet()){
+            FileOutputWriter.writeLinesInOutputFile(entry.getKey(), entry.getValue());
         }
     }
 

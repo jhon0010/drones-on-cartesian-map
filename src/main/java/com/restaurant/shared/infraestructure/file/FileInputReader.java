@@ -1,4 +1,4 @@
-package com.restaurant.shared.infraestructure;
+package com.restaurant.shared.infraestructure.file;
 
 import com.restaurant.shared.infraestructure.exceptions.InputInstructionFileNotFoundException;
 import org.slf4j.Logger;
@@ -18,9 +18,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Utility for read files from the resources location.
  */
-public class FileReader {
+public class FileInputReader {
 
-    private static final Logger LOGGER = getLogger(FileReader.class);
+    private static final Logger LOGGER = getLogger(FileInputReader.class);
     private static final String PATH_RESOURCES = "/home/jhon/workspace/drones-on-cartesian-map/src/main/resources";
 
     public static Map<String, List<String>> readInputInstructionFiles() throws InputInstructionFileNotFoundException {
@@ -43,7 +43,7 @@ public class FileReader {
     private static List<String> getLinesFromFile(String fileName) throws FileNotFoundException {
 
         List<String> lines = new ArrayList<>();
-        ClassLoader classLoader = FileReader.class.getClassLoader();
+        ClassLoader classLoader = FileInputReader.class.getClassLoader();
         File file = new File(classLoader.getResource(fileName).getFile());
         LOGGER.info("File found = " + file.getName());
 
