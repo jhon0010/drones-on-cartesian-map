@@ -2,14 +2,9 @@ package com.restaurant.shared.domain;
 
 public enum Orientation {
 
-    N("North"),
-    W("West"),
-    S("South"),
-    E("East");
+    N,
+    W,
+    S,
+    E
 
-    private String description;
-
-    Orientation(String description) {
-        this.description = description;
-    }
 }

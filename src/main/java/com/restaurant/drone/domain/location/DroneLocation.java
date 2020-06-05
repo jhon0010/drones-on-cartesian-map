@@ -1,15 +1,13 @@
 package com.restaurant.drone.domain.location;
 
 import com.restaurant.shared.domain.Orientation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.ToString;
 
-@Getter
-@Setter
+@Data
+@Builder
 @ToString
-@AllArgsConstructor
 public class DroneLocation {
 
     private int x;
@@ -19,9 +17,12 @@ public class DroneLocation {
     /**
      * Default start location for a drone.
      */
-    public DroneLocation() {
-        this.x = 0;
-        this.y = 0;
-        this.orientation = Orientation.N;
+    public static DroneLocation getDefault() {
+        return DroneLocation.builder()
+                .x(0)
+                .y(0)
+                .orientation(Orientation.N)
+                .build();
     }
+
 }
