@@ -6,6 +6,10 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Represents one line of the input file with many commands.
+ * For example AAAAIAA
+ */
 @Data
 @Builder
 public class Instruction {
